@@ -1,0 +1,14 @@
+第三关新武器素材记录
+
+工具模式：内置 imagegen，transparent_background: true；生成 PNG 的 alpha 保留。
+用户原图未修改，其余攻击、弹丸、宝箱素材直接复制到 assets 并在加载时切帧。
+
+1. candy-wand.png
+参考/编辑对象：D:/Download/爱丽丝梦游仙境游戏资产/糖果魔法棒.png
+任务：提取糖果魔法棒为透明的游戏道具，保留糖果头、金色爱心、玫瑰、薄荷与红色丝带、条纹杖身、挂钟和 EAT ME 标签，去掉绿色背景、地面、蘑菇和与武器不相连的悬浮装饰。保持原像素插画细节和颜色，完整武器竖直置于画布中心，不增加文字或背景。
+Prompt specification: Extract the candy magic wand from the reference as one complete upright game item on a genuinely transparent background. Preserve the ornate striped candy head, gold hearts, roses, mint and crimson bows, candy-cane shaft, hanging pocket watch and EAT ME tag, and the original detailed pixel-art design and palette. Remove the green background, ground, mushrooms, and detached floating decorations. Keep the complete weapon with generous transparent margins. No scene, no shadow, no new text or ornaments.
+
+2. wand-run.png
+参考：用户的爱丽丝角色、爱丽丝新形态攻击.png 和糖果魔法棒。
+任务：同一角色持魔法棒的八帧跑步循环，4 列 × 2 行，统一体型、朝向和脚底线。右脚落地、承重、左腿通过、腾起，接着左脚落地、承重、右腿通过、腾起。魔法棒稳定握持，头发和裙摆轻微跟随；透明背景，人物完全位于各格内，保留金发兔耳、蓝裙白围裙、异色条纹袜和棕靴。
+Prompt specification: Production game sprite sheet of the same blonde bunny-eared Alice carrying the ornate candy magic wand in place of the cupcake. Exactly eight full-body running poses in reading order, four columns by two rows, facing RIGHT. Preserve her mint blue dress, white apron, mismatched striped stockings, brown boots and detailed Japanese pixel-art identity. Animate a complete alternating-foot run cycle: right contact, weight/down, left passing, airborne/up, left contact, weight/down, right passing, airborne/up. Keep body scale and ground baseline consistent across all cells, hold the wand steadily, let hair and skirt follow softly. Generous transparent spacing around every character and the whole weapon; no clipped wand heads, no floor, shadow, text, border, checkerboard or opaque backdrop.

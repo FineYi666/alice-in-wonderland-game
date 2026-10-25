@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#211c2c" />
+    <title>Mint Parfait Parade · 薄荷甜心大冒险</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Ctext y='32' font-size='32'%3E🧁%3C/text%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main class="arcade">
+      <header class="masthead">
+        <a class="wordmark" href="./"
+          ><span class="brand-star">✦</span> MINT PARFAIT
+          <span class="brand-small">PARADE</span></a
+        >
+        <div class="edition"><i></i> 可玩原型 <span>/</span> FOUR STAGES</div>
+      </header>
+      <section class="title-row">
+        <div>
+          <p class="eyebrow">A LITTLE SWEETNESS. A BIG ADVENTURE.</p>
+          <h1>薄荷甜心大冒险<span>!</span></h1>
+          <p class="subtitle">拿好你的纸杯蛋糕，糖果王国需要一位小英雄。</p>
+        </div>
+        <div class="stamp">
+          <b id="stamp-title">SUGAR CASTLE</b
+          ><span id="stamp-stage">01 — 奶油城堡</span
+          ><small>RUN · JUMP · ROLL · SPRINKLE</small>
+        </div>
+      </section>
+      <nav class="stage-select" aria-label="选择游戏关卡">
+        <div>
+          <button id="stage-one" aria-pressed="true" disabled>
+            <b>01</b> 奶油城堡 <small>火花 · 绯红魔术</small>
+          </button>
+          <button id="stage-two" aria-pressed="false" disabled>
+            <b>02</b> 幽绿迷宫 <small>糯糯 · 两阶段挑战</small>
+          </button>
+          <button id="stage-three" aria-pressed="false" disabled>
+            <b>03</b> 绯红时钟庭 <small>登塔探索 · 狂三 / 白之女王</small>
+          </button>
+          <button id="stage-four" aria-pressed="false" disabled>
+            <b>04</b> 晴蓝潮汐海岸 <small>大肥鲸 · 海岸 I</small>
+          </button>
+        </div>
+        <span>城堡 → 森林 → 时钟庭 → 海岸 <i>↗</i></span>
+      </nav>
+      <section class="cabinet" aria-label="薄荷甜心游戏">
+        <div class="cabinet-top">
+          <span>✦ MINT PARFAIT PARADE</span><span>1 PLAYER <i>●</i></span>
+        </div>
+        <div class="screen" id="screen">
+          <canvas
+            id="game"
+            width="1100"
+            height="620"
+            tabindex="0"
+            aria-label="横版动作游戏。A D 移动，空格跳跃，台阶上 S 加空格下台，Shift 或 L 翻滚，P 暂停。第四关操控大肥鲸，沙滩上 J 海浪，空中或台阶上 J 水球，满能量 K 吸血；击败全部小怪后，在地图中央按 E 开箱获得钥匙，再到终点按 E 解封传送门，进入第二小关挑战 Claude 娘。BOSS 的激光柱横向推进，必须翻滚穿过。前三关 J 武器攻击，空中 S 加 J 下劈，满能量 K 星糖齐射，Q 喝药。"
+          ></canvas>
+          <div class="hud">
+            <div class="hud-life">
+              <small id="health-label">甜心能量</small
+              ><span id="hearts" aria-label="生命值">♥ ♥ ♥ ♥ ♥</span>
+            </div>
+            <div class="hud-stage">
+              <small id="stage-number">STAGE 01</small
+              ><span><span id="stage-name">奶油城堡</span> <b>→</b></span>
+            </div>
+            <div><small>SCORE</small><span id="score">000000</span></div>
+            <div class="hud-sweets">
+              <small>糖果收集</small
+              ><span
+                ><img
+                  class="hud-candy-icon"
+                  src="./assets/candy-pickup.png"
+                  width="26"
+                  height="26"
+                  alt=""
+                />
+                <b id="candies">00</b></span
+              >
+            </div>
+            <button
+              id="pause"
+              class="hud-button"
+              aria-label="暂停游戏"
+              title="暂停 / P"
+              disabled
+            >
+              Ⅱ
+            </button>
+          </div>
+          <div class="overlay" id="overlay">
+            <div class="intro-card">
+              <span class="ribbon" id="overlay-tag">✦ 一场甜蜜的冒险 ✦</span>
+              <h2 id="overlay-title">准备好<br />大闹糖果王国？</h2>
+              <p id="overlay-copy">
+                跑过奶油桥，击退捣蛋甜点，<br />把快乐送到城堡的另一端。
+              </p>
+              <button class="play-button" id="start" disabled>
+                正在准备糖果…
+              </button>
+              <span class="start-hint" id="start-hint"
+                >键盘 / 触屏均可游玩</span
+              >
+            </div>
+          </div>
+          <div class="level-toast" id="toast" role="status"></div>
+          <div
+            id="boss-announcement"
+            class="sr-only"
+            role="status"
+            aria-live="polite"
+          ></div>
+          <div id="boss-nameplate" class="boss-nameplate" hidden>
+            <small id="boss-intro-number"></small>
+            <p id="boss-intro-title"></p>
+            <h2 id="boss-intro-name"></h2>
+            <span id="boss-intro-english"></span>
+            <p id="boss-intro-quote"></p>
+            <small id="boss-intro-moves"></small>
+          </div>
+          <button id="skip-boss-intro" class="skip-boss-intro" hidden>
+            跳过演出 <span>SPACE / ENTER →</span>
+          </button>
+          <div id="boss-status" class="boss-status sr-only" hidden></div>
+          <div id="clock-objective" class="clock-objective" hidden></div>
+          <div
+            id="time-stop-label"
+            class="time-stop-label"
+            role="status"
+            hidden
+          ></div>
+          <div id="clock-map" class="clock-map" hidden>
+            <strong>时钟城堡 · 探索路线</strong>
+            <div class="clock-map-grid">
+              <span data-room="tower">发条塔 ↑</span
+              ><span data-room="gallery">高层回廊 →</span
+              ><span data-room="vault">钟心密室 · 钥匙</span>
+              <span data-room="entry">绯红前厅 ↶</span
+              ><span data-room="bridge">封印长桥 →</span
+              ><span data-room="arena">双王庭 · BOSS</span>
+            </div>
+            <p id="clock-map-copy"></p>
+            <small id="clock-map-rooms"></small>
+            <span>M 关闭地图 · 查看地图时战斗暂停</span>
+          </div>
+          <div id="chest-hint" class="chest-hint" hidden></div>
+          <div id="weapon-status" class="weapon-status" hidden>
+            <span id="weapon-label"></span>
+            <div class="wand-track"><i id="wand-fill"></i></div>
+          </div>
+          <div class="roll-status">
+            <kbd id="roll-key">L / ⇧</kbd>
+            <span id="roll-label">翻滚 就绪</span>
+          </div>
+          <div class="special-meter">
+            <span>K</span>
+            <div>
+              <small id="special-label">星糖能量 0/100 · +2/s</small>
+              <div
+                class="meter-track"
+                role="progressbar"
+                aria-label="星糖能量"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                aria-valuenow="0"
+              >
+                <i id="special-fill"></i>
+              </div>
+            </div>
+          </div>
+          <div id="potion-status" class="potion-status" hidden>
+            <img src="./assets/magic-potion.png" alt="" />
+            <kbd>Q</kbd>
+            <div>
+              <span id="potion-label">魔法药水 ×0 · Q 使用</span>
+              <div class="ward-track"><i id="ward-fill"></i></div>
+            </div>
+          </div>
+          <div class="screen-note" id="screen-note">向右前进，抵达甜品屋 →</div>
+        </div>
+        <div class="cabinet-bottom">
+          <span><i></i> <b id="status">等待出发</b></span
+          ><span>♥ MADE OF SUGAR & PIXELS</span>
+          <div class="utility">
+            <button id="sound" aria-label="关闭声音" title="切换音乐与音效">
+              ♪ 声音 开</button
+            ><button id="fullscreen" aria-label="全屏游戏" title="全屏">
+              ⛶ 全屏</button
+            ><button id="restart" title="重新开始">↻ 重来</button>
+          </div>
+        </div>
+      </section>
+      <nav class="touch-controls" aria-label="触屏游戏控制">
+        <div>
+          <button data-key="ArrowLeft" aria-label="向左移动">◀</button
+          ><button data-key="ArrowRight" aria-label="向右移动">▶</button>
+        </div>
+        <div>
+          <button data-key="KeyE" aria-label="打开宝箱或进入附近的门">
+            互动
+          </button>
+          <button data-key="KeyM" aria-label="查看第三关探索地图">地图</button>
+          <button data-key="KeyQ" aria-label="喝药获得六秒无敌">喝药</button>
+          <button data-key="ShiftLeft" aria-label="翻滚">翻滚</button>
+          <button data-key="Space" aria-label="跳跃">跳跃</button
+          ><button data-key="KeyK" aria-label="满能量时释放大招">大招</button
+          ><button data-key="KeyJ" class="touch-fire" aria-label="攻击">
+            攻击
+          </button>
+        </div>
+      </nav>
+      <section class="below-game">
+        <p class="ocean-guide">
+          第四关 · 大肥鲸：A / D 移动，空格跳跃，沙滩上 J
+          召唤贴地海浪，空中或台阶上 J 发射水球。 Shift / L 翻滚，S +
+          空格下台阶。击败全部 16 只小怪后，返回地图中央按 E 开启海洋宝箱，
+          获得潮汐钥匙；到终点按 E 使用钥匙，播放破封动画并开启传送门。
+          随后进入第二小关「花光圣殿」挑战 Claude 娘。花光激柱横推全场，
+          跳跃不能避开，使用翻滚穿过光柱。大招能量每秒恢复 2
+          点，拾取潮汐能量珠恢复 25 点，海洋爱心恢复 1 格生命并播放回血特效。
+          两种补给都会循环跳动；地图仅放 1 个回血道具，随机 2 只小怪各掉 1
+          个回血道具， 其余小怪掉能量珠，地图定时刷新能量珠。满 100 后按 K
+          释放「潮汐吸血」：手边漩涡快速演出，近距离命中敌人扣除 2
+          点敌方血量、恢复自身 1 格生命；远处目标无法吸取。 海岸第一小关共 16
+          只小怪：水母与灯笼鱼蓄力射击，章鱼海盗与寄居蟹近战。
+          留意起手动作，跳跃或翻滚躲避；身体接触不扣血。K 技能播放「TOKEN
+          来」原声音效。第一小关循环播放《Let me go》。BOSS 出场时空格 / Enter
+          跳过，P 暂停；战败后直接重试 BOSS 小关。每道海浪只命中一个敌人。 击败
+          Claude 后拾取跳动的花光信物，L 变身 Deep Claude，持续 30
+          秒，每小关可用一次。新形态 J 发射小型光柱，所有攻击伤害提高
+          30%。此后用 Shift 翻滚。右侧封锁的花光之门解锁，按 E 完成 4-2。 空中 S
+          + J 释放水刃跳劈，静止时偶尔播放待机动作。 Claude
+          半血进入二阶段，巨大人物原图现身，五种封号弹幕间隔随机横穿。
+          弹幕分别覆盖地面、第一层和第二层台阶，利用跳跃、翻滚与 S +
+          空格下台换层； 台阶挡不住光柱，仍需翻滚穿过。
+        </p>
+        <div class="controls">
+          <span class="control-label">HOW TO PLAY</span
+          ><span><kbd>A</kbd><kbd>D</kbd> 移动</span
+          ><span><kbd>SPACE</kbd> 跳跃</span><span><kbd>J</kbd> 武器攻击</span
+          ><span><kbd>S + J</kbd> 空中下劈</span
+          ><span><kbd>S + SPACE</kbd> 下台阶</span
+          ><span><kbd>K</kbd> 满能量大招</span
+          ><span><kbd>SHIFT / L</kbd> 翻滚</span><span><kbd>E</kbd> 互动</span
+          ><span><kbd>Q</kbd> 喝药</span><span><kbd>P</kbd> 暂停</span>
+        </div>
+        <p>
+          人物与小怪、BOSS
+          身体接触不扣血，只有攻击命中才受伤。第一关糕点小怪贴近人物时才蓄力挥击，可跳跃、翻滚或绕到背后躲避。空中按
+          S + J 下劈，蛋糕伤害 2、魔法棒伤害
+          3，起手到落地收招期间免受敌人近身挥击。 台阶上按 S +
+          空格穿过脚下平台，下方台阶仍可接住人物。 J
+          三段蛋糕连击；近战命中和拾糖积攒能量，每秒还会自动恢复 2 点，满 100
+          后按 K
+          释放一次星糖三连齐射。空挥和射击不额外加能量，暂停和出场演出时停止恢复。
+          翻滚可穿过弹幕和冲刺；跳跃躲开荆棘与震地。糯糯半血后会连续出招，留意地面预警。
+          森林小怪会巡逻，发现你后追击或跳跃，捕蝇花在射击间隙换位。第二关的三只猫猫宝箱分别藏在入口高台、中段补给矮台和后段矮台：跳上台阶，靠近按
+          E 打开，拾取药水后按 Q 获得 6
+          秒无敌；绿色护盾和倒计时显示保护状态，暂停和演出时停止倒计时，护盾期间再次按
+          Q 不会浪费药水。 Boss 出场时可按 Space / Enter 或点击“跳过演出”；P
+          可暂停演出。第三关共有两只红黑时钟宝箱：前厅高台藏有糖果魔法棒，逆行回廊高台藏有无敌药水，靠近按
+          E 开箱。 取得魔法棒后切换新形态，J 发射玫瑰糖果弹，最多储备 4
+          发魔力，每秒恢复 0.9 发，射击间隔 0.72 秒；K
+          仍需满星糖能量，释放强化三连齐射。
+          射击命中不额外积攒能量；魔力在暂停、地图、演出和时停期间停止恢复。
+          第三关按 E 进入门或取得钥匙，M
+          查看路线。登塔进入高层密室，取钥匙后折返前厅高台，按 E
+          使用钥匙：锁链裂开、红色漩涡展开后，淡出传送至长桥，再前往双王庭。解封约
+          3 秒，期间可按 P
+          暂停。狂三半血召来白之女王；时停解除后立即躲枪弹，女王斩击需要翻滚穿过；地面剑会逐簇逼近，可跳跃或翻滚躲避。
+        </p>
+        <div class="practice-controls" aria-label="Boss 练习">
+          <span> BOSS PRACTICE </span>
+          <button
+            id="wand-practice"
+            class="boss-practice clock-practice"
+            disabled
+          >
+            时钟宝箱 / 新武器 →
+          </button>
+          <button
+            id="kurumi-practice"
+            class="boss-practice clock-practice"
+            disabled
+          >
+            狂三出场 / 挑战 →
+          </button>
+          <button
+            id="time-stop-practice"
+            class="boss-practice clock-practice"
+            disabled
+          >
+            刻刻帝 / 时停体验 →
+          </button>
+          <button
+            id="royal-phase2"
+            class="boss-practice clock-practice"
+            disabled
+          >
+            白之女王 / 双王战 →
+          </button>
+          <button id="clock-map-toggle" class="boss-practice clock-practice">
+            第三关路线 / M
+          </button>
+          <button
+            id="portal-practice"
+            class="boss-practice clock-practice"
+            disabled
+          >
+            时钟门 / BOSS 入口 →
+          </button>
+          <button
+            id="seal-practice"
+            class="boss-practice clock-practice"
+            disabled
+          >
+            封印门 / 钥匙解封 →
+          </button>
+          <button id="boss-practice" class="boss-practice" disabled>
+            火花出场 / 挑战 →
+          </button>
+          <button
+            id="claude-practice"
+            class="boss-practice floral-practice"
+            disabled
+          >
+            Claude 娘出场 / 挑战 →
+          </button>
+          <button
+            id="nuonu-practice"
+            class="boss-practice forest-practice"
+            disabled
+          >
+            糯糯出场 / 挑战 →
+          </button>
+          <button
+            id="nuonu-phase2"
+            class="boss-practice forest-practice"
+            disabled
+          >
+            练习狂怒形态 →
+          </button>
+          <button
+            id="treasure-practice"
+            class="boss-practice forest-practice"
+            disabled
+          >
+            宝箱 / 药水体验 →
+          </button>
+        </div>
+      </section>
+      <footer>
+        <span>一口薄荷，一路冒险。</span
+        ><span>ORIGINAL CHARACTER ART PROVIDED BY YOU <b>✦</b> WEB ARCADE</span>
+      </footer>
+    </main>
+    <canvas
+      id="time-active-layer"
+      width="1100"
+      height="620"
+      aria-hidden="true"
+      hidden
+    ></canvas>
+    <script src="./clock-stage.js"></script>
+    <script src="./ocean-stage.js"></script>
+    <script src="./game.js"></script>
+  </body>
+</html>
