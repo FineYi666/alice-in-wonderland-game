@@ -18,7 +18,7 @@
 
 ### 方式一：下载打包版（推荐）
 
-到 [Releases](../../releases) 页面下载 `爱丽丝梦游仙境.zip`，解压后**双击「启动游戏.bat」**即可：
+到 [Releases](../../releases) 页面下载 `alice-in-wonderland-v1.0.zip`（即「爱丽丝梦游仙境」完整游戏包），解压后**双击「启动游戏.bat」**即可：
 
 - 自动启动本地游戏服务并打开默认浏览器（地址形如 `http://localhost:4174/mint-parade/`）；
 - 内置 Node.js 运行时（`runtime/`），无需安装依赖、无需联网；
